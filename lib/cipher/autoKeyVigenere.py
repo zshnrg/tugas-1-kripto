@@ -4,6 +4,9 @@ class autoKeyVigenere(Cipher):
     def __init__(self) -> None:
         self.key = None
 
+    def __init__(self, key: str) -> None:
+        self.key = key
+
     def setKey(self, key: str) -> None:
         # Set key dengan key yang diberikan
         self.key = key

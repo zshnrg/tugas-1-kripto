@@ -4,7 +4,7 @@ from cipherInterface import Cipher
 
 class oneTimePad(Cipher):
     def __init__(self) -> None:
-        self.key = None
+        self.key = self.generateKey()
 
     def generateKey(self, length=100) -> None:
         # Generate random key dengan panjang 100 karakter
