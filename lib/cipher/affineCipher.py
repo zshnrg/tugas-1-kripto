@@ -64,25 +64,20 @@ class affineCipher(Cipher):
     
     def encrypt(self, plaintext: str) -> str:
         cipherText = ""
+        plaintext = self.clean(plaintext)
         for char in plaintext:
-            if char.isalpha():
-                if char.isupper():
-                    cipherText += chr(((self.m * (ord(char) - 65) + self.b) % self.n) + 65)
-                else:
-                    cipherText += chr(((self.m * (ord(char) - 97) + self.b) % self.n) + 97)
+            if char.isupper():
+                cipherText += chr(((self.m * (ord(char) - 65) + self.b) % self.n) + 65)
             else:
-                cipherText += char
+                cipherText += chr(((self.m * (ord(char) - 97) + self.b) % self.n) + 97)
         return cipherText
 
     def decrypt(self, ciphertext: str) -> str:
         plainText = ""
+        ciphertext = self.clean(ciphertext)
         for char in ciphertext:
-            if char.isalpha():
-                if char.isupper():
-                    plainText += chr(((self.m_inverse * (ord(char) - 65 - self.b)) % self.n) + 65)
-                else:
-                    plainText += chr(((self.m_inverse * (ord(char) - 97 - self.b)) % self.n) + 97)
+            if char.isupper():
+                plainText += chr(((self.m_inverse * (ord(char) - 65 - self.b)) % self.n) + 65)
             else:
-                plainText += char
-
-        
+                plainText += chr(((self.m_inverse * (ord(char) - 97 - self.b)) % self.n) + 97)
+        return plainText
