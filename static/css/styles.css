@@ -1,0 +1,263 @@
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: "Inter", sans-serif;
+    gap: 12px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+.toggleCheckboxInput {
+    display: none;
+}
+
+.toggleContainerInput {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: fit-content;
+    min-width: 20%;
+    border: 3px solid #694662;
+    border-radius: 16px;
+    background: #694662;
+    font-weight: bold;
+    color: #694662;
+    cursor: pointer;
+}
+
+.toggleContainerInput:hover {
+    background: #5a3f4a;
+}
+
+.toggleContainerInput::before {
+    content: '';
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    left: 0%;
+    border-radius: 14px;
+    background: white;
+    transition: all 0.3s;
+}
+
+.toggleContainerInput div {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 16px;
+    padding-right: 16px;
+    text-align: center;
+    z-index: 1;
+}
+
+.toggleCheckboxInput:checked+.toggleContainerInput::before {
+    left: 50%;
+}
+
+.toggleCheckboxInput:checked+.toggleContainerInput div:first-child {
+    color: white;
+    transition: color 0.3s;
+}
+
+.toggleCheckboxInput:checked+.toggleContainerInput div:last-child {
+    color: #694662;
+    transition: color 0.3s;
+}
+
+.toggleCheckboxInput+.toggleContainerInput div:first-child {
+    color: #694662;
+    transition: color 0.3s;
+}
+
+.toggleCheckboxInput+.toggleContainerInput div:last-child {
+    color: white;
+    transition: color 0.3s;
+}
+
+.header {
+    text-align: center;
+    padding: 20px;
+    border-radius: 16px;
+    background: #f1f1f1;
+}
+
+.inputType {
+    display: flex;
+    height: fit-content;
+    width: 100%;
+    gap: 12px;
+}
+
+.inputWithLabel {
+    display: flex;
+    width: 100%;
+    height: 40px;
+}
+
+.sideLabel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    text-align: center;
+    min-width: 20%;
+    padding-left: 16px;
+    padding-right: 16px;
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+    background-color: #694662;
+    color: white;
+}
+
+.sideInput {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+}
+
+.cipherSelector {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+}
+
+.textArea {
+    height: auto;
+    resize: none;
+    padding: 10px;
+    border-radius: 16px;
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+}
+
+
+.textInput {
+    height: auto;
+    padding: 10px;
+    border-radius: 16px;
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+}
+
+.actionButton {
+    display: flex;
+    width: 100%;
+    gap: 12px;
+}
+
+.primaryButton {
+    width: 100%;
+    background-color: #694662;
+    color: white;
+    border: none;
+    border-radius: 16px;
+    padding: 16px;
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.primaryButton:hover {
+    background-color: #5a3f4a;
+}
+
+.primaryButton:active {
+    background-color: #4b2a34;
+}
+
+.secondaryButton {
+    width: 100%;
+    background-color: #f1f1f1;
+    color: #694662;
+    border: none;
+    border-radius: 16px;
+    padding: 16px;
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.secondaryButton:hover {
+    background-color: #e0e0e0;
+}
+
+.secondaryButton:active {
+    background-color: #d1d1d1;
+}
+
+.output {
+    display: flex;
+    gap: 12px;
+}
+
+.drag-area {
+    height: 220px;
+    width: 100%;
+    border: 1px dashed #694662;
+    border-radius: 16px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+}
+
+h3 {
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.drag-area .icon {
+    font-size: 50px;
+    color: #694662;
+}
+
+.drag-area .header {
+    font-size: 20px;
+    font-weight: 500;
+    color: #34495e;
+}
+
+.drag-area .support {
+    font-size: 12px;
+    color: gray;
+    margin: 10px 0 15px 0;
+}
+
+.drag-area .button {
+    font-size: 20px;
+    font-weight: 500;
+    color: #694662;
+    cursor: pointer;
+}
+
+.drag-area.active {
+    border: 2px solid #1683ff;
+}
+
+.drag-area img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.highlight {
+    /* adding border  */
+    border: 3px dashed #694662;
+}

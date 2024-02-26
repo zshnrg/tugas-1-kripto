@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>cryptographer.</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+    <div class='header'>
+        <h1 style="line-height: 100px;">cryptographer.</h1>
+        <p style="line-height: 0;">Encrypt and decrypt your messages with ease.</p>
+        <p style="color: grey; font-size: small;">by Rozan Ghosani and Natasya Vercelly H</p>
+    </div>
+    <form style="display: flex; flex-direction: column; gap: 12px;" action="/" method="POST" enctype="multipart/form-data">
+        <div class="inputType">
+            <input type='checkbox' id='toggleInput' name="isFileInput" class='toggleCheckboxInput' {% if isFileInput %} checked {% endif %}/>
+            <label for='toggleInput' class='toggleContainerInput'>
+                <div>Plaintext</div>
+                <div>File</div>
+            </label>
+            <div class="inputWithLabel">
+                <label class="sideLabel">
+                    Cipher Type
+                </label>
+                <select class="cipherSelector" name="cipherType">
+                    <option value="vigenere" {% if cipherType == "vigenere" %} selected {% endif %}>Vigenere Cipher</option>
+                    <option value="extendedVigenere" {% if cipherType == "extendedVigenere" %} selected {% endif %}>Extended Vigenere Cipher</option>
+                    <option value="playfair" {% if cipherType == "playfair" %} selected {% endif %}>Playfair Cipher</option>
+                    <option value="product" {% if cipherType == "product" %} selected {% endif %}>Product Cipher</option>
+                    <option value="affine" {% if cipherType == "affine" %} selected {% endif %}>Affine Cipher</option>
+                    <option value="autokey" {% if cipherType == "autokey" %} selected {% endif %}>Auto-Key Cipher</option>
+                </select>
+            </div>
+        </div>
+        <textarea class="textArea" id="inputText" placeholder="Plaintext" cols="50" rows="10" name="plainText">{{ plainText }}</textarea>
+        <div class="drag-area" id="inputFile">
+            <span class>Drag & Drop</span>
+            <span class="header">or 
+                <span class="button">
+                browse
+                </span>
+            </span>
+            <input type="file" hidden name="file"/>
+            <span class="support">Supports: Any</span>
+        </div>
+        <div id="affineKey" {% if cipherType == "affine" and cipherType %} style="display: flex; gap: 12px;" {% else %} style="display: none;" {% endif %}>
+            <div class="inputWithLabel">
+                <label class="sideLabel">
+                    Multiplier (m)
+                </label>
+                <input class="sideInput" type="number" placeholder="Key" name="affineMKey" value={{m}}>
+            </div>
+            <div class="inputWithLabel">
+                <label class="sideLabel">
+                    Shifter (b)
+                </label>
+                <input class="sideInput" type="number" placeholder="Key" name="affineBKey" value={{b}}>
+            </div>
+        </div>
+        <input class="textInput" type="text" id="key" placeholder="Key" name="key" value={{key}} {% if cipherType == "affine" %} hidden {% endif %} >
+        <div class="actionButton">
+            <button class="primaryButton" name="action" value="encrypt">Encrypt</button>
+            <button class="secondaryButton" name="action" value="decrypt">Decrypt</button>
+        </div>
+    </form>
+    <textarea class="textArea" id="outputText" placeholder="Ciphertext" cols="50" rows="10" readonly>{{ cipherText }}</textarea>
+    <div class="output">
+        <button class="primaryButton">Download</button>
+    </div>
+
+    <!-- Script -->
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</body>
+
+</html>
