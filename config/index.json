@@ -1,5 +1,11 @@
 {
+    "name": "cryptographer.",
+    "version": "0.1.0",
+    "main": "main.py",
+    "debug": true,
+    "host": "127.0.0.1",
+    "port": 5000,
     "modules": [
-
+        "Flask"
     ]
 }
