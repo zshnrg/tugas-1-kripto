@@ -1,16 +1,16 @@
-from cipherInterface import Cipher
+from lib.cipher.cipherInterface import Cipher
 
 class affineCipher(Cipher):
     def __init__(self) -> None:
         self.m = None
         self.b = None
-        self.n = None
+        self.n = 26
         self.m_inverse = None
     
     def __init__(self, m_key: int, b_key: int, n_key=26) -> None:
         # Error handling untuk m_key, b_key, dan n_key apabila bukan integer
-        if not isinstance(m_key, int) or not isinstance(b_key, int) or not isinstance(n_key, int):
-            raise ValueError("m_key, b_key, and n_key must be integers")
+        if not isinstance(m_key, int) or not isinstance(b_key, int):
+            raise ValueError("m_key and b_key must be integers")
 
         # Error handling untuk m_key dan n_key apabila tidak relatif prima
         if (m_key % 2 == 0 and b_key % 2 == 0) or (m_key % 5 == 0 and n_key % 5 == 0):

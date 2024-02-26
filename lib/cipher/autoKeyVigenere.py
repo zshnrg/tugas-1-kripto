@@ -1,4 +1,4 @@
-from cipherInterface import Cipher
+from lib.cipher.cipherInterface import Cipher
 
 class autoKeyVigenere(Cipher):
     def __init__(self) -> None:

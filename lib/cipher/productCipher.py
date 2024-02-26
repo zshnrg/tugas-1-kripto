@@ -1,4 +1,4 @@
-from cipherInterface import Cipher
+from lib.cipher.cipherInterface import Cipher
 import math
 
 class productCipher(Cipher):
