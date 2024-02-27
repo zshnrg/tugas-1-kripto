@@ -46,13 +46,3 @@ def decryptCipher(
     else:
         return "Invalid cipher"
     
-def fileHandler(file):
-    content = []
-    while True:
-        byte = file.read(1)
-        if not byte:
-            break
-        character = chr(ord(byte))
-        content.append(character)
-    return ''.join(content)
-               

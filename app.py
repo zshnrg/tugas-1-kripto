@@ -1,17 +1,18 @@
 import os
 from flask import Flask, render_template, request, send_file
-from lib.cipherDriver import encryptCipher, decryptCipher, fileHandler
+from lib.cipherDriver import encryptCipher, decryptCipher
 import base64
 import io
 
 app = Flask(__name__)
 
-fileBytes = None
+fileData = None
+fileName = None
 fileExtension = None
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    global fileBytes, fileExtension
+    global fileData, fileName, fileExtension
     if request.method == 'POST':
         
         isFileInput = request.form.get('isFileInput')
@@ -40,52 +41,59 @@ def index():
                 if cipherText == "Invalid cipher":
                     return render_template('index.html', cipherText=cipherText, plainText=plainText, cipherType=cipherType, key=key, a=a, b=b, isFileInput=False)
                 
-                cipherText = cipherText.encode('utf-8')
+                cipherText = cipherText.encode()
                 cipherText = base64.b64encode(cipherText)
-                cipherText = cipherText.decode('utf-8')
+                cipherText = cipherText.decode()
             else:
-                cipherText = plainText.encode('utf-8')
+                cipherText = plainText.encode()
                 cipherText = base64.b64decode(plainText)
-                cipherText = cipherText.decode('utf-8')
+                cipherText = cipherText.decode()
                 cipherText = decryptCipher(cipherType, cipherText=cipherText, key=key, a=a, b=b)
             
             return render_template('index.html', cipherText=cipherText, plainText=plainText, cipherType=cipherType, key=key, a=a, b=b, isFileInput=False)
         else:
             file = request.files['file']
-            # turning file into bytes and then into string
-            fileData = fileHandler(file)
             cipherType = request.form.get('cipherType')
             key = request.form.get('key')
             key = key.replace(' ', '')
 
-            print(fileData.encode('utf-8'))
+            if file:
 
-            cipherText = ""
+                if (request.form.get('action') == 'encrypt'):
+                    fileContent = base64.b64encode(file.read()).decode()
 
-            if (request.form.get('action') == 'encrypt'):
-                fileData = encryptCipher(cipherType, plainText=fileData, key=key, a=0, b=0)
-                fileBytes = fileData.encode('utf-8')
-                cipherText = fileData
+                    fileData = encryptCipher(cipherType, plainText=fileContent, key=key, a=0, b=0)
+                    if fileData == "Invalid cipher":
+                        return render_template('index.html', fileData=fileData, cipherText="Invalid cipher", cipherType=cipherType, key=key, m=0, b=0, isFileInput=True)
+                    
+                    fileData = fileData.encode()
+
+                    cipherText = base64.b64encode(fileData)
+                    cipherText = cipherText.decode()
+
+                else:
+                    fileContent = file.read().decode()
+
+                    fileData = decryptCipher(cipherType, cipherText=fileContent, key=key, a=0, b=0)
+                    if fileData == "Invalid cipher":
+                        return render_template('index.html', fileData=fileData, cipherText="Invalid cipher", cipherType=cipherType, key=key, m=0, b=0, isFileInput=True)
+
+                    fileData = base64.b64decode(fileData)
+                    cipherText = fileData
+
+                originalFileName = file.filename
+                fileName = os.path.splitext(originalFileName)[0]
+                fileExtension = os.path.splitext(originalFileName)[1]
             else:
-                fileData = decryptCipher(cipherType, cipherText=fileData, key=key, a=0, b=0)
-                print("\n\n\n\n ----------------------------", fileData)
-                fileBytes = fileData
-                cipherText = fileData
-
-
-            originalFileName = file.filename
-            fileName = os.path.splitext(originalFileName)[0]
-            fileExtension = os.path.splitext(originalFileName)[1]
-
+                return render_template('index.html', fileData=fileData, cipherText="No file uploaded", cipherType=cipherType, key=key, m=0, b=0, isFileInput=True)
 
             return render_template('index.html', fileData=fileData, cipherText=cipherText, cipherType=cipherType, key=key, m=0, b=0, fileName=fileName, fileExtension=fileExtension, isFileInput=True)
     return render_template('index.html')
 
 @app.route('/download')
 def download_file():
-    global fileBytes
-    global fileExtension
-    print("fileBytes: ", fileBytes)
-    print("fileExtension: ", fileExtension)
-    file = io.BytesIO(fileBytes.encode("utf-8"))
-    return send_file(file, as_attachment=True, download_name="encrypted" + fileExtension)
+    global fileData, fileExtension, fileName
+    if fileData == None:
+        return render_template('index.html', cipherText="No file uploaded", isFileInput=True)
+    file = io.BytesIO(fileData)
+    return send_file(file, as_attachment=True, download_name=fileName + "_encrypted" + fileExtension)
