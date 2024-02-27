@@ -1,4 +1,3 @@
-import time
 from lib.moduleChecker import checkModule, clearConsole, readFileJson
 import webbrowser
 
