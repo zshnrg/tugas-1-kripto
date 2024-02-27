@@ -17,7 +17,7 @@ Repositori ini merupakan sebuah project aplikasi program yang menyediakan algori
   <a href="#about">About</a> |
   <a href="#system-requirement">System Requirements</a> |
   <a href="#installation">Installation</a> |
-  <a href="#feature">Feature</a>
+  <a href="#features">Features</a>
 </p>
 
 ## About
@@ -76,7 +76,7 @@ Program ini ditulis dalam bahasa Python yang dibantu dengan library Flask untuk 
 5. Halaman [http://127.0.0.1:5000/](http://127.0.0.1:5000/) akan otomatis terbuka.
 
 
-## Feature
+## Features
 Program ini memiliki fitur:
 - Enkripsi dan dekripsi dengan berbagai jenis cipher klasik
 - Kustomisasi kunci
