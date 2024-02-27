@@ -12,8 +12,8 @@ def readFileJson(file):
 
 def checkModule(moduleName):
     if importlib.util.find_spec(moduleName) is None:
-        print(f"[ ❌ ] {moduleName} is not installed. Installing...")
+        print(f"[ X ] {moduleName} is not installed. Installing...")
         subprocess.check_call([sys.executable, "-m", "pip", "install", moduleName])
     else:
-        print(f"[ ✔ ] {moduleName} is installed.")
+        print(f"[ v ] {moduleName} is installed.")
 
