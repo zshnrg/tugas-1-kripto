@@ -12,9 +12,11 @@
         <p style="line-height: 0;">Encrypt and decrypt your messages with ease.</p>
         <p style="color: grey; font-size: small;">by Rozan Ghosani and Natasya Vercelly H</p>
     </div>
-    <form style="display: flex; flex-direction: column; gap: 12px;" action="/" method="POST" enctype="multipart/form-data">
+    <form style="display: flex; flex-direction: column; gap: 12px;" action="/" method="POST" onsubmit="return validateForm()"
+        enctype="multipart/form-data">
         <div class="inputType">
-            <input type='checkbox' id='toggleInput' name="isFileInput" class='toggleCheckboxInput' {% if isFileInput %} checked {% endif %}/>
+            <input type='checkbox' id='toggleInput' name="isFileInput" class='toggleCheckboxInput' {% if isFileInput %}
+                checked {% endif %} />
             <label for='toggleInput' class='toggleContainerInput'>
                 <div>Plaintext</div>
                 <div>File</div>
@@ -24,49 +26,62 @@
                     Cipher Type
                 </label>
                 <select class="cipherSelector" name="cipherType">
-                    <option value="vigenere" {% if cipherType == "vigenere" %} selected {% endif %}>Vigenere Cipher</option>
-                    <option value="extendedVigenere" {% if cipherType == "extendedVigenere" %} selected {% endif %}>Extended Vigenere Cipher</option>
-                    <option value="playfair" {% if cipherType == "playfair" %} selected {% endif %}>Playfair Cipher</option>
-                    <option value="product" {% if cipherType == "product" %} selected {% endif %}>Product Cipher</option>
-                    <option value="affine" {% if cipherType == "affine" %} selected {% endif %}>Affine Cipher</option>
-                    <option value="autokey" {% if cipherType == "autokey" %} selected {% endif %}>Auto-Key Cipher</option>
+                    <option value="vigenere" {% if cipherType=="vigenere" %} selected {% endif %} {% if isFileInput %}
+                        disabled {% endif %}>Vigenere Cipher</option>
+                    <option value="extendedVigenere" {% if cipherType=="extendedVigenere" %} selected {% endif %}>
+                        Extended Vigenere Cipher</option>
+                    <option value="playfair" {% if cipherType=="playfair" %} selected {% endif %} {% if isFileInput %}
+                        disabled {% endif %}>Playfair Cipher</option>
+                    <option value="product" {% if cipherType=="product" %} selected {% endif %} {% if isFileInput %}
+                        disabled {% endif %}>Product Cipher</option>
+                    <option value="affine" {% if cipherType=="affine" %} selected {% endif %} {% if isFileInput %}
+                        disabled {% endif %}>Affine Cipher</option>
+                    <option value="autokey" {% if cipherType=="autokey" %} selected {% endif %}>Auto-Key Cipher</option>
                 </select>
             </div>
         </div>
-        <textarea class="textArea" id="inputText" placeholder="Plaintext" cols="50" rows="10" name="plainText">{{ plainText }}</textarea>
-        <div class="drag-area" id="inputFile">
+        <textarea class="textArea" id="inputText" placeholder="Plaintext" cols="50" rows="10" name="plainText" {% if
+            isFileInput %} style="display: none;" {% endif %}>{{ plainText }}</textarea>
+        <div class="drag-area" id="inputFile" {% if not isFileInput %} style="display: none;" {% else %}
+            style="display: flex;" {% endif %}>
             <span class>Drag & Drop</span>
-            <span class="header">or 
+            <span class="header">or
                 <span class="button">
-                browse
+                    browse
                 </span>
             </span>
-            <input type="file" hidden name="file"/>
+            <input type="file" hidden name="file" />
             <span class="support">Supports: Any</span>
         </div>
-        <div id="affineKey" {% if cipherType == "affine" and cipherType %} style="display: flex; gap: 12px;" {% else %} style="display: none;" {% endif %}>
+        <div id="affineKey" {% if cipherType=="affine" or cipherType=="product" %} style="display: flex; gap: 12px;" {% else %}
+            style="display: none;" {% endif %}>
             <div class="inputWithLabel">
-                <label class="sideLabel">
-                    Multiplier (m)
+                <label class="sideLabel" id="firstNumKey">
+                    {% if cipherType=="affine" %} Multiplier (m) {% else %} Shifter {% endif %}
                 </label>
-                <input class="sideInput" type="number" placeholder="Key" name="affineMKey" value={{m}}>
+                <input class="sideInput" type="number" placeholder="Key" name="aKey" value={{a}}>
             </div>
             <div class="inputWithLabel">
-                <label class="sideLabel">
-                    Shifter (b)
+                <label class="sideLabel" id="secondNumKey">
+                    {% if cipherType=="affine" %}  Shifter (b) {% else %} Key {% endif %}
                 </label>
-                <input class="sideInput" type="number" placeholder="Key" name="affineBKey" value={{b}}>
+                <input class="sideInput" type="number" placeholder="Key" name="bKey" value={{b}}>
             </div>
         </div>
-        <input class="textInput" type="text" id="key" placeholder="Key" name="key" value={{key}} {% if cipherType == "affine" %} hidden {% endif %} >
+
+        <input class="textInput" type="text" id="key" placeholder="Key" name="key" value={{key}} {% if
+            cipherType=="affine" or cipherType=="product" %} hidden {% endif %}>
         <div class="actionButton">
-            <button class="primaryButton" name="action" value="encrypt">Encrypt</button>
-            <button class="secondaryButton" name="action" value="decrypt">Decrypt</button>
+            <button class="primaryButton" name="action" type="submit" value="encrypt">Encrypt</button>
+            <button class="secondaryButton" name="action" type="submit" value="decrypt">Decrypt</button>
         </div>
     </form>
-    <textarea class="textArea" id="outputText" placeholder="Ciphertext" cols="50" rows="10" readonly>{{ cipherText }}</textarea>
-    <div class="output">
-        <button class="primaryButton">Download</button>
+    <textarea class="textArea" id="outputText" placeholder="Ciphertext (Base64)" cols="50" rows="10"
+        readonly>{{ cipherText }}</textarea>
+    <div class="output" id="output" {% if not isFileInput %} style="display: none;" {% endif %}>
+        <form action="/download" method="get">
+            <button class="primaryButton" type="submit">Download</button>
+        </form>
     </div>
 
     <!-- Script -->

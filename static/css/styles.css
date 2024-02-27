@@ -201,17 +201,11 @@ h1 {
     background-color: #d1d1d1;
 }
 
-.output {
-    display: flex;
-    gap: 12px;
-}
-
 .drag-area {
     height: 220px;
     width: 100%;
     border: 1px dashed #694662;
     border-radius: 16px;
-    display: none;
     align-items: center;
     justify-content: center;
     flex-direction: column;

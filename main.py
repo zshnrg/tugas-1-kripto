@@ -1,7 +1,6 @@
 import time
 from lib.moduleChecker import checkModule, clearConsole, readFileJson
 import webbrowser
-from app import app
 
 if __name__ == '__main__':
 
@@ -14,4 +13,5 @@ if __name__ == '__main__':
     print("[ ⭐ ] Starting the application...")
 
     # webbrowser.open(f"http://{config['host']}:{config['port']}")
+    from app import app
     app.run(host=config['host'], port=config['port'], debug=config['debug'])

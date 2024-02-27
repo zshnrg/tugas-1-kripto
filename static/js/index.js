@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const textInput = document.getElementById("inputText");
   const affineKey = document.getElementById("affineKey");
   const normalKey = document.getElementById("key");
+  const downloadButton = document.getElementById("output");
 
   // Hide file input by default
   toggleInput.addEventListener("change", function () {
@@ -13,28 +14,38 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (fileInputChecked) {
       // Hide options other than "extendedVigenere" and "auto-key"
-      cipherSelector.value = "extendedVigenere";
+      if (cipherSelector.value !== "autokey") {
+        cipherSelector.value = "extendedVigenere";
+      }
       fileInput.style.display = "flex";
       textInput.style.display = "none";
       affineKey.style.display = "none";
       normalKey.style.display = "block";
+      try {
+        downloadButton.style.display = "block";
+      } catch (error) {}
+
       for (let i = 0; i < cipherOptions.length; i++) {
         if (
           cipherOptions[i].value !== "extendedVigenere" &&
           cipherOptions[i].value !== "autokey"
         ) {
-          cipherOptions[i].style.display = "none";
+          cipherOptions[i].disabled = true;
         }
       }
     } else {
       // Show all options
-      cipherSelector.value = "vigenere";
       fileInput.style.display = "none";
       textInput.style.display = "block";
       affineKey.style.display = "none";
       normalKey.style.display = "block";
+
+      try {
+        downloadButton.style.display = "none";
+      } catch (error) {}
+
       for (let i = 0; i < cipherOptions.length; i++) {
-        cipherOptions[i].style.display = "block";
+        cipherOptions[i].disabled = false;
       }
     }
   });
@@ -127,20 +138,26 @@ document.addEventListener("DOMContentLoaded", function () {
   const cipherSelector = document.querySelector(".cipherSelector");
   const affineKey = document.getElementById("affineKey");
   const normalKey = document.getElementById("key");
+  const firstNumKey = document.getElementById("firstNumKey");
+  const secondNumKey = document.getElementById("secondNumKey");
 
   cipherSelector.addEventListener("change", function () {
-    if (cipherSelector.value === "affine") {
+    if (cipherSelector.value === "affine" || cipherSelector.value === "product") {
       normalKey.style.display = "none";
       affineKey.style.display = "flex";
       affineKey.style.flexDirection = "row";
+      affineKey.style.gap = "12px";
+      if (cipherSelector.value === "product") {
+        firstNumKey.textContent = "Shifter";
+        secondNumKey.textContent = "Key";
+      } else {
+        firstNumKey.textContent = "Multiplier (m)";
+        secondNumKey.textContent = "Shifter (b)";
+      }
     } else {
       normalKey.style.display = "block";
       affineKey.style.display = "none";
     }
-    if (cipherSelector.value === "product") {
-      normalKey.setAttribute("type", "number");
-    } else {
-      normalKey.setAttribute("type", "text");
-    }
+
   });
 });

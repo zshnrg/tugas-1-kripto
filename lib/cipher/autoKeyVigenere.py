@@ -25,6 +25,7 @@ class autoKeyVigenere(Cipher):
     def decrypt(self, ciphertext: str) -> str:
         plaintext = ""
         autoKey = self.key
+        print("autoKey: ", autoKey, "type: ", type(autoKey))
         for i in range(len(ciphertext)):
             if (i > len(self.key) - 1):
                 autoKey += plaintext[i - len(self.key)]
