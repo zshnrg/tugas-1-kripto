@@ -44,6 +44,17 @@ class playfairCipher(Cipher):
         for i in range(0, len(plaintext), 2):
             char1 = plaintext[i]
             char2 = plaintext[i+1] if i+1 < len(plaintext) else "X"
+            
+            # jika ada karakter yang sama, tambahkan X
+            if char1 == char2:
+                char2 = "X"
+                i -= 1
+            
+            # jika char1 dan char2 sama-sama X, tambahkan Z
+            if char1 == "X" and char2 == "X":
+                char2 = "Z"
+                i -= 1    
+    
             row1, col1 = self.findPosition(char1)
             row2, col2 = self.findPosition(char2)
             if row1 == row2:
