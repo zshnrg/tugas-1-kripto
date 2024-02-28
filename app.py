@@ -78,10 +78,10 @@ def index():
             # Validating input
             if cipherType == 'affine':
                 if a % 2 == 0 or a % 13 == 0:
-                    return render_template('index.html', fileData=file, cipherText="Invalid key, multiplier must be relatively prime with 26", cipherType=cipherType, key=key, m=0, b=0, isFileInput=True)
+                    return render_template('index.html', fileData=file, cipherText="Invalid key, multiplier must be relatively prime with 26", cipherType=cipherType, key=key, a=a, b=b, isFileInput=True)
             
             if key == '':
-                return render_template('index.html', fileData=file, cipherText="Invalid key, key cannot be empty", cipherType=cipherType, key=key, m=0, b=0, isFileInput=True)
+                return render_template('index.html', fileData=file, cipherText="Invalid key, key cannot be empty", cipherType=cipherType, key=key, a=a, b=b, isFileInput=True)
 
             if file:
                 isEncrypt = request.form.get('action')
@@ -98,7 +98,7 @@ def index():
 
                     fileData = encryptCipher(cipherType, plainText=fileContent, key=key, a=a, b=b)
                     if fileData == "Invalid cipher":
-                        return render_template('index.html', fileData=fileData, cipherText="Invalid cipher", cipherType=cipherType, key=key, m=0, b=0, isFileInput=True)
+                        return render_template('index.html', fileData=fileData, cipherText="Invalid cipher", cipherType=cipherType, key=key, a=a, b=b, isFileInput=True)
                     
                     fileData = fileData.encode()
 
@@ -117,7 +117,7 @@ def index():
 
                     fileData = decryptCipher(cipherType, cipherText=fileContent, key=key, a=a, b=b)
                     if fileData == "Invalid cipher":
-                        return render_template('index.html', fileData=fileData, cipherText="Invalid cipher", cipherType=cipherType, key=key, m=0, b=0, isFileInput=True)
+                        return render_template('index.html', fileData=fileData, cipherText="Invalid cipher", cipherType=cipherType, key=key, a=a, b=b, isFileInput=True)
 
                     if cipherType != 'extendedVigenere' and cipherType != 'autokey':
                         fileData = fileData.encode()
@@ -130,12 +130,12 @@ def index():
                         
                     cipherText = fileData
             else:
-                return render_template('index.html', fileData=fileData, cipherText="No file uploaded", cipherType=cipherType, key=key, m=0, b=0, isFileInput=True)
+                return render_template('index.html', fileData=fileData, cipherText="No file uploaded", cipherType=cipherType, key=key, a=a, b=b, isFileInput=True)
             
             fileName = file.filename.split('.')[0]
             fileExtension = file.filename.split('.')[1]
 
-            return render_template('index.html', fileData=fileData, cipherText=cipherText, cipherType=cipherType, key=key, m=0, b=0, fileName=fileName, fileExtension=fileExtension, isFileInput=True)
+            return render_template('index.html', fileData=fileData, cipherText=cipherText, cipherType=cipherType, key=key, a=a, b=b, fileName=fileName, fileExtension=fileExtension, isFileInput=True)
     return render_template('index.html')
 
 @app.route('/download')
