@@ -7,12 +7,13 @@ import io
 app = Flask(__name__)
 
 fileData = None
-fileName = None
-fileExtension = None
+isEncrypt = None
+cipherType = None
+originalFileName = None
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    global fileData, fileName, fileExtension
+    global fileData, isEncrypt, cipherType, originalFileName
 
     # print all the request data
     print(request.form)
@@ -46,7 +47,8 @@ def index():
             if key == '':
                 return render_template('index.html', cipherText="Invalid key, key cannot be empty", plainText=plainText, cipherType=cipherType, key=key, a=a, b=b, isFileInput=False)
 
-            if request.form.get('action') == 'encrypt':
+            isEncrypt = request.form.get('action')
+            if isEncrypt == 'encrypt':
                 cipherText = encryptCipher(cipherType, plainText=plainText, key=key, a=a, b=b)
                 if cipherText == "Invalid cipher":
                     return render_template('index.html', cipherText=cipherText, plainText=plainText, cipherType=cipherType, key=key, a=a, b=b, isFileInput=False)
@@ -83,21 +85,21 @@ def index():
                 return render_template('index.html', fileData=file, cipherText="Invalid key, key cannot be empty", cipherType=cipherType, key=key, m=0, b=0, isFileInput=True)
 
             if file:
-                if (request.form.get('action') == 'encrypt'):
+                isEncrypt = request.form.get('action')
+                if (isEncrypt == 'encrypt'):
                     if cipherType != 'extendedVigenere' and cipherType != 'autokey':
                         # filtering non-alphabet characters
                         fileContent = file.read().decode()
                         fileContent =  ''.join([i for i in fileContent if i.isalpha()])
                     else:
                         fileContent = base64.b64encode(file.read()).decode()
-
-                    print(fileContent)
+                        # adding original file name and extension in the beginning of the file as metadata separated unique character '|'
+                        originalFileName = file.filename + '|'
+                        fileContent = originalFileName + fileContent
 
                     fileData = encryptCipher(cipherType, plainText=fileContent, key=key, a=0, b=0)
                     if fileData == "Invalid cipher":
                         return render_template('index.html', fileData=fileData, cipherText="Invalid cipher", cipherType=cipherType, key=key, m=0, b=0, isFileInput=True)
-                    
-                    print(fileData)
                     
                     fileData = fileData.encode()
 
@@ -107,10 +109,12 @@ def index():
                 else:
                     if cipherType != 'extendedVigenere' and cipherType != 'autokey':
                         fileContent = file.read().decode()
-                        print(fileContent)
                         fileContent =  ''.join([i for i in fileContent if i.isalpha()])
                     else:
                         fileContent = file.read().decode()
+
+                    print("----------------------")
+                    print(originalFileName)
 
                     fileData = decryptCipher(cipherType, cipherText=fileContent, key=key, a=0, b=0)
                     if fileData == "Invalid cipher":
@@ -119,23 +123,34 @@ def index():
                     if cipherType != 'extendedVigenere' and cipherType != 'autokey':
                         fileData = fileData.encode()
                     else:
+                        print(fileData)
+                        fileData = fileData.split('|')
+                        originalFileName = fileData[0]
+                        fileData = fileData[1]
                         fileData = base64.b64decode(fileData)
                         
                     cipherText = fileData
-
-                originalFileName = file.filename
-                fileName = os.path.splitext(originalFileName)[0]
-                fileExtension = os.path.splitext(originalFileName)[1]
             else:
                 return render_template('index.html', fileData=fileData, cipherText="No file uploaded", cipherType=cipherType, key=key, m=0, b=0, isFileInput=True)
 
+
+            fileName = os.path.splitext(originalFileName)[0]
+            fileExtension = os.path.splitext(originalFileName)[1]
             return render_template('index.html', fileData=fileData, cipherText=cipherText, cipherType=cipherType, key=key, m=0, b=0, fileName=fileName, fileExtension=fileExtension, isFileInput=True)
     return render_template('index.html')
 
 @app.route('/download')
 def download_file():
-    global fileData, fileExtension, fileName
+    global fileData, isEncrypt, cipherType, originalFileName
     if fileData == None:
         return render_template('index.html', cipherText="No file uploaded", isFileInput=True)
-    file = io.BytesIO(fileData)
-    return send_file(file, as_attachment=True, download_name=fileName + "_encrypted" + fileExtension)
+    
+    if isEncrypt == 'encrypt':
+        file = io.BytesIO(fileData)
+        return send_file(file, as_attachment=True, download_name="encrypted.hts")
+    else:
+        file = io.BytesIO(fileData)
+        if cipherType != 'extendedVigenere' and cipherType != 'autokey':
+            return send_file(file, as_attachment=True, download_name="decrypted.txt")
+        else:
+            return send_file(file, as_attachment=True, download_name=originalFileName)
