@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
         downloadButton.style.display = "block";
       } catch (error) {}
       // Change file options to only accept txt if the cipher is not extended vigenere or autokey
-      if (cipherSelector.value !== "extendedVigenere" && cipherSelector.value !== "autoKey") {
+      if (cipherSelector.value !== "extendedVigenere" && cipherSelector.value !== "autokey") {
         fileInput.accept = ".txt";
         supprotLabel.textContent = "Supported file types: .txt";
       } else {
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   cipherSelector.addEventListener("change", function () {
     // Change file options to only accept txt if the cipher is not extended vigenere or autokey
-    if (cipherSelector.value !== "extendedVigenere" && cipherSelector.value !== "autoKey") {
+    if (cipherSelector.value !== "extendedVigenere" && cipherSelector.value !== "autokey") {
       fileInput.accept = ".txt";
       supprotLabel.textContent = "Supported file types: .txt";
     } else {
@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
       supportText.textContent = "File: " + files[0].name;
     } else {
       cipherSelector = document.querySelector(".cipherSelector");
-      if (cipherSelector.value !== "extendedVigenere" && cipherSelector.value !== "autoKey") {
+      if (cipherSelector.value !== "extendedVigenere" && cipherSelector.value !== "autokey") {
         supportText.textContent = "Supported file types: .txt";
       } else {
         supportText.textContent = "Supported file types: all";
