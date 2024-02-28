@@ -87,11 +87,11 @@ Berikut merupakan kompabilitas dari algoritma cipher yang tersedia.
 
 | Algoritma                | Karakter   | Plaintext | File Input |
 | ------------------------ | ---------- | --------- | ---------- |
-| Vigenere Cipher          | 26 Alfabet | ✔️       | ❌         |
-| Extended Vigenere Cipher | 256 ASCII  | ✔️       | ✔️         |
-| Playfair Cipher          | 26 Alfabet | ✔️       | ❌         |
-| Product Cipher           | 26 Alfabet | ✔️       | ❌         |
-| Affine Cipher            | 26 Alfabet | ✔️       | ❌         |
-| Auto-key Vigenere Cipher | 256 ASCII  | ✔️       | ✔️         |
+| Vigenere Cipher          | 26 Alfabet | ✔️       | `.txt`     |
+| Extended Vigenere Cipher | 256 ASCII  | ✔️       | any        |
+| Playfair Cipher          | 26 Alfabet | ✔️       | `.txt`     |
+| Product Cipher           | 26 Alfabet | ✔️       | `.txt`     |
+| Affine Cipher            | 26 Alfabet | ✔️       | `.txt`     |
+| Auto-key Vigenere Cipher | 256 ASCII  | ✔️       | any        |
 
 </center>
