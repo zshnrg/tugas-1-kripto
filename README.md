@@ -1,23 +1,23 @@
 # Cryptographer.
 
 ![alt text](/doc/header.jpeg "Gasball header")
-<center>
+
+  
+<p align="center">
 Repositori ini merupakan sebuah project aplikasi program yang menyediakan algoritma enkripsi dan dekripsi dari berbagai macam jenis cipher klasik yang dibuat untuk memenuhi tugas II4031 Kriptografi dan Koding
+</p>
 
 <br>
 
-| NIM      | Nama                      |
-| -------- | ------------------------- |
-| 18221119 | Natasya Vercelly Harijadi |
-| 18221121 | Rozan Ghosani             |
-
-</center>
+<p align="center">
+18221121 Natasya Vercelly Harijadi - 18221121 Rozan Ghosani
+</p>
 
 <p align="center">
   <a href="#about">About</a> |
   <a href="#system-requirement">System Requirements</a> |
   <a href="#installation">Installation</a> |
-  <a href="#feature">Feature</a>
+  <a href="#features">Features</a>
 </p>
 
 ## About
@@ -40,10 +40,12 @@ Program ini ditulis dalam bahasa Python yang dibantu dengan library Flask untuk 
 2. Buka Terminal
 3. Pindah ke direktori yang diinginkan
 4. Ketikan `git clone`, lalu tempelkan URL yang telah disalin tadi 
-   ```
+   ```sh
    git clone https://github.com/zshnrg/tugas-1-kripto.git
-5. Tekan **Enter** untuk membuat *local clone*
    ```
+   
+5. Tekan **Enter** untuk membuat *local clone*
+   ```sh
    $ git clone https://github.com/zshnrg/tugas-1-kripto.git
     > Cloning into `tugas-1-kripto`...
     > remote: Counting objects: 10, done.
@@ -54,8 +56,11 @@ Program ini ditulis dalam bahasa Python yang dibantu dengan library Flask untuk 
 
 ### Running the app
 1. Jalankan terminal pada repositori
-2. Ketikan `python main.py`
-3. Tekan **Enter** untuk menjalankan program
+2. Ketikan
+   ```sh
+   python main.py
+   ```
+4. Tekan **Enter** untuk menjalankan program
     ```
     $ \tugas-1-kripto> python main.py
 
@@ -68,10 +73,10 @@ Program ini ditulis dalam bahasa Python yang dibantu dengan library Flask untuk 
     * Running on http://127.0.0.1:5000
     Press CTRL+C to quit
     ```
-4. Halaman [http://127.0.0.1:5000/](http://127.0.0.1:5000/) akan otomatis terbuka.
+5. Halaman [http://127.0.0.1:5000/](http://127.0.0.1:5000/) akan otomatis terbuka.
 
 
-## Feature
+## Features
 Program ini memiliki fitur:
 - Enkripsi dan dekripsi dengan berbagai jenis cipher klasik
 - Kustomisasi kunci
