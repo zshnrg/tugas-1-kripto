@@ -1,4 +1,3 @@
-import os
 from flask import Flask, render_template, request, send_file
 from lib.cipherDriver import encryptCipher, decryptCipher
 import base64
@@ -74,7 +73,7 @@ def index():
                 a = int(request.form.get('aKey'))
                 b = int(request.form.get('bKey'))
             if cipherType != 'product':
-                key = key.replace(' ', '')                
+                key = key.replace(' ', '')         
 
             # Validating input
             if cipherType == 'affine':
@@ -97,7 +96,7 @@ def index():
                         originalFileName = file.filename + '|'
                         fileContent = originalFileName + fileContent
 
-                    fileData = encryptCipher(cipherType, plainText=fileContent, key=key, a=0, b=0)
+                    fileData = encryptCipher(cipherType, plainText=fileContent, key=key, a=a, b=b)
                     if fileData == "Invalid cipher":
                         return render_template('index.html', fileData=fileData, cipherText="Invalid cipher", cipherType=cipherType, key=key, m=0, b=0, isFileInput=True)
                     
@@ -116,7 +115,7 @@ def index():
                     print("----------------------")
                     print(originalFileName)
 
-                    fileData = decryptCipher(cipherType, cipherText=fileContent, key=key, a=0, b=0)
+                    fileData = decryptCipher(cipherType, cipherText=fileContent, key=key, a=a, b=b)
                     if fileData == "Invalid cipher":
                         return render_template('index.html', fileData=fileData, cipherText="Invalid cipher", cipherType=cipherType, key=key, m=0, b=0, isFileInput=True)
 
@@ -132,10 +131,10 @@ def index():
                     cipherText = fileData
             else:
                 return render_template('index.html', fileData=fileData, cipherText="No file uploaded", cipherType=cipherType, key=key, m=0, b=0, isFileInput=True)
+            
+            fileName = file.filename.split('.')[0]
+            fileExtension = file.filename.split('.')[1]
 
-
-            fileName = os.path.splitext(originalFileName)[0]
-            fileExtension = os.path.splitext(originalFileName)[1]
             return render_template('index.html', fileData=fileData, cipherText=cipherText, cipherType=cipherType, key=key, m=0, b=0, fileName=fileName, fileExtension=fileExtension, isFileInput=True)
     return render_template('index.html')
 
