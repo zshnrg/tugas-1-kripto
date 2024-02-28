@@ -12,5 +12,5 @@ if __name__ == '__main__':
     print("[ * ] Starting the application...")
 
     from app import app
-    webbrowser.open(f"http://{config['host']}:{config['port']}")
-    app.run(host=config['host'], port=config['port'])
+    # webbrowser.open(f"http://{config['host']}:{config['port']}")
+    app.run(host=config['host'], port=config['port'], debug=config['debug'])

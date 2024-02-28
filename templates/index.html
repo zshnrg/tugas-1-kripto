@@ -26,16 +26,11 @@
                     Cipher Type
                 </label>
                 <select class="cipherSelector" name="cipherType">
-                    <option value="vigenere" {% if cipherType=="vigenere" %} selected {% endif %} {% if isFileInput %}
-                        disabled {% endif %}>Vigenere Cipher</option>
-                    <option value="extendedVigenere" {% if cipherType=="extendedVigenere" %} selected {% endif %}>
-                        Extended Vigenere Cipher</option>
-                    <option value="playfair" {% if cipherType=="playfair" %} selected {% endif %} {% if isFileInput %}
-                        disabled {% endif %}>Playfair Cipher</option>
-                    <option value="product" {% if cipherType=="product" %} selected {% endif %} {% if isFileInput %}
-                        disabled {% endif %}>Product Cipher</option>
-                    <option value="affine" {% if cipherType=="affine" %} selected {% endif %} {% if isFileInput %}
-                        disabled {% endif %}>Affine Cipher</option>
+                    <option value="vigenere" {% if cipherType=="vigenere" %} selected {% endif %}>Vigenere Cipher</option>
+                    <option value="extendedVigenere" {% if cipherType=="extendedVigenere" %} selected {% endif %}>Extended Vigenere Cipher</option>
+                    <option value="playfair" {% if cipherType=="playfair" %} selected {% endif %}>Playfair Cipher</option>
+                    <option value="product" {% if cipherType=="product" %} selected {% endif %}>Product Cipher</option>
+                    <option value="affine" {% if cipherType=="affine" %} selected {% endif %}>Affine Cipher</option>
                     <option value="autokey" {% if cipherType=="autokey" %} selected {% endif %}>Auto-Key Cipher</option>
                 </select>
             </div>
@@ -46,12 +41,23 @@
             style="display: flex;" {% endif %}>
             <span class>Drag & Drop</span>
             <span class="header">or
-                <span class="button">
+                <span class="button" id="browseButton">
                     browse
                 </span>
             </span>
-            <input type="file" hidden name="file" />
-            <span class="support">Supports: Any</span>
+            <input id="file" type="file" hidden name="file" {% if cipherType=="extendedVigenere" or cipherType=="autokey" %} accept="*" {% else %} accept=".txt" {% endif %} />
+            <!-- <input type="fileData" hidden name="file" {% if cipherType=="extendedVigenere" or cipherType=="autokey" %} accept="*" {% else %} accept=".txt" {% endif %} /> -->
+            <span class="support" id="inputFileSupport"> 
+                {% if cipherType %}
+                    {% if cipherType == "extendedVigenere" or cipherType == "autokey" %}
+                        Supported file types: all
+                    {% else %}
+                        Supported file types: .txt
+                    {% endif %}
+                {% else %}
+                    Supported file types: .txt
+                {% endif %}
+            </span>
         </div>
         <div id="affineKey" {% if cipherType=="affine" or cipherType=="product" %} style="display: flex; gap: 12px;" {% else %}
             style="display: none;" {% endif %}>

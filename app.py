@@ -13,6 +13,11 @@ fileExtension = None
 @app.route('/', methods=['GET', 'POST'])
 def index():
     global fileData, fileName, fileExtension
+
+    # print all the request data
+    print(request.form)
+    print(request.files)
+
     if request.method == 'POST':
         
         isFileInput = request.form.get('isFileInput')
@@ -35,6 +40,11 @@ def index():
                 if a % 2 == 0 or a % 13 == 0:
                     return render_template('index.html', cipherText="Invalid key, multiplier must be relatively prime with 26", plainText=plainText, cipherType=cipherType, key=key, a=a, b=b, isFileInput=False)
                 
+            if plainText == '':
+                return render_template('index.html', cipherText="Invalid plain text, plain text cannot be empty", plainText=plainText, cipherType=cipherType, key=key, a=a, b=b, isFileInput=False)
+            
+            if key == '':
+                return render_template('index.html', cipherText="Invalid key, key cannot be empty", plainText=plainText, cipherType=cipherType, key=key, a=a, b=b, isFileInput=False)
 
             if request.form.get('action') == 'encrypt':
                 cipherText = encryptCipher(cipherType, plainText=plainText, key=key, a=a, b=b)
@@ -56,15 +66,38 @@ def index():
             cipherType = request.form.get('cipherType')
             key = request.form.get('key')
             key = key.replace(' ', '')
+            a = 0
+            b = 0
+            if cipherType == 'affine' or cipherType == 'product':
+                a = int(request.form.get('aKey'))
+                b = int(request.form.get('bKey'))
+            if cipherType != 'product':
+                key = key.replace(' ', '')                
+
+            # Validating input
+            if cipherType == 'affine':
+                if a % 2 == 0 or a % 13 == 0:
+                    return render_template('index.html', fileData=file, cipherText="Invalid key, multiplier must be relatively prime with 26", cipherType=cipherType, key=key, m=0, b=0, isFileInput=True)
+            
+            if key == '':
+                return render_template('index.html', fileData=file, cipherText="Invalid key, key cannot be empty", cipherType=cipherType, key=key, m=0, b=0, isFileInput=True)
 
             if file:
-
                 if (request.form.get('action') == 'encrypt'):
-                    fileContent = base64.b64encode(file.read()).decode()
+                    if cipherType != 'extendedVigenere' and cipherType != 'autokey':
+                        # filtering non-alphabet characters
+                        fileContent = file.read().decode()
+                        fileContent =  ''.join([i for i in fileContent if i.isalpha()])
+                    else:
+                        fileContent = base64.b64encode(file.read()).decode()
+
+                    print(fileContent)
 
                     fileData = encryptCipher(cipherType, plainText=fileContent, key=key, a=0, b=0)
                     if fileData == "Invalid cipher":
                         return render_template('index.html', fileData=fileData, cipherText="Invalid cipher", cipherType=cipherType, key=key, m=0, b=0, isFileInput=True)
+                    
+                    print(fileData)
                     
                     fileData = fileData.encode()
 
@@ -72,13 +105,22 @@ def index():
                     cipherText = cipherText.decode()
 
                 else:
-                    fileContent = file.read().decode()
+                    if cipherType != 'extendedVigenere' and cipherType != 'autokey':
+                        fileContent = file.read().decode()
+                        print(fileContent)
+                        fileContent =  ''.join([i for i in fileContent if i.isalpha()])
+                    else:
+                        fileContent = file.read().decode()
 
                     fileData = decryptCipher(cipherType, cipherText=fileContent, key=key, a=0, b=0)
                     if fileData == "Invalid cipher":
                         return render_template('index.html', fileData=fileData, cipherText="Invalid cipher", cipherType=cipherType, key=key, m=0, b=0, isFileInput=True)
 
-                    fileData = base64.b64decode(fileData)
+                    if cipherType != 'extendedVigenere' and cipherType != 'autokey':
+                        fileData = fileData.encode()
+                    else:
+                        fileData = base64.b64decode(fileData)
+                        
                     cipherText = fileData
 
                 originalFileName = file.filename

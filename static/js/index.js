@@ -1,64 +1,63 @@
 document.addEventListener("DOMContentLoaded", function () {
   const toggleInput = document.getElementById("toggleInput");
   const cipherSelector = document.querySelector(".cipherSelector");
-  const fileInput = document.getElementById("inputFile");
+  const fileInputArea = document.getElementById("inputFile");
   const textInput = document.getElementById("inputText");
-  const affineKey = document.getElementById("affineKey");
-  const normalKey = document.getElementById("key");
   const downloadButton = document.getElementById("output");
+  const supprotLabel = document.querySelector(".support");
+  const fileInput = document.getElementById("file");
+  
 
   // Hide file input by default
   toggleInput.addEventListener("change", function () {
-    const fileInputChecked = toggleInput.checked;
-    const cipherOptions = cipherSelector.options;
+    const fileInputAreaChecked = toggleInput.checked;
 
-    if (fileInputChecked) {
-      // Hide options other than "extendedVigenere" and "auto-key"
-      if (cipherSelector.value !== "autokey") {
-        cipherSelector.value = "extendedVigenere";
-      }
-      fileInput.style.display = "flex";
+    if (fileInputAreaChecked) {
       textInput.style.display = "none";
-      affineKey.style.display = "none";
-      normalKey.style.display = "block";
+      fileInputArea.style.display = "flex";
       try {
         downloadButton.style.display = "block";
       } catch (error) {}
-
-      for (let i = 0; i < cipherOptions.length; i++) {
-        if (
-          cipherOptions[i].value !== "extendedVigenere" &&
-          cipherOptions[i].value !== "autokey"
-        ) {
-          cipherOptions[i].disabled = true;
-        }
+      // Change file options to only accept txt if the cipher is not extended vigenere or autokey
+      if (cipherSelector.value !== "extendedVigenere" && cipherSelector.value !== "autoKey") {
+        fileInput.accept = ".txt";
+        supprotLabel.textContent = "Supported file types: .txt";
+      } else {
+        // Accept all file types
+        fileInput.accept = "*";
+        supprotLabel.textContent = "Supported file types: all";
       }
     } else {
-      // Show all options
-      fileInput.style.display = "none";
       textInput.style.display = "block";
-      affineKey.style.display = "none";
-      normalKey.style.display = "block";
-
+      fileInputArea.style.display = "none";
       try {
         downloadButton.style.display = "none";
       } catch (error) {}
+    }
+  });
 
-      for (let i = 0; i < cipherOptions.length; i++) {
-        cipherOptions[i].disabled = false;
-      }
+  cipherSelector.addEventListener("change", function () {
+    // Change file options to only accept txt if the cipher is not extended vigenere or autokey
+    if (cipherSelector.value !== "extendedVigenere" && cipherSelector.value !== "autoKey") {
+      fileInput.accept = ".txt";
+      supprotLabel.textContent = "Supported file types: .txt";
+    } else {
+      // Accept all file types
+      fileInput.accept = "*";
+      supprotLabel.textContent = "Supported file types: all";
     }
   });
 
   // open file input when clicking on the text input
-  fileInput.addEventListener("click", function () {
-    fileInput.click();
+  fileInputArea.addEventListener("click", function () {
+    fileInputArea.click();
   });
 });
 
 document.addEventListener("DOMContentLoaded", function () {
   const dragArea = document.querySelector(".drag-area");
-  const fileInput = dragArea.querySelector("input[type=file]");
+  const fileInput = document.getElementById("file");
+  const browseButton = document.getElementById("browseButton");
 
   // Prevent default behavior for drag events
   ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
@@ -79,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
   dragArea.addEventListener("drop", handleDrop, false);
 
   // Open file input when browse button is clicked
-  dragArea.querySelector(".button").addEventListener("click", function () {
+  browseButton.addEventListener("click", function () {
     fileInput.click();
 
     // Update support text to the selected file
@@ -124,11 +123,16 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function updateSupportText(files) {
-    const supportText = document.querySelector(".support");
+    const supportText = document.getElementById("inputFileSupport");
     if (files.length > 0) {
       supportText.textContent = "File: " + files[0].name;
     } else {
-      supportText.textContent = "Supports: Any";
+      cipherSelector = document.querySelector(".cipherSelector");
+      if (cipherSelector.value !== "extendedVigenere" && cipherSelector.value !== "autoKey") {
+        supportText.textContent = "Supported file types: .txt";
+      } else {
+        supportText.textContent = "Supported file types: all";
+      }
     }
   }
 });

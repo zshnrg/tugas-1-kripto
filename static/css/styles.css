@@ -255,3 +255,10 @@ h3 {
     /* adding border  */
     border: 3px dashed #694662;
 }
+
+.fileName {
+    font-size: 12px;
+    color: gray;
+    margin: 10px 0 15px 0;
+    line-height: 0%;
+}
